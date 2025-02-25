@@ -9,6 +9,13 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+
+const sequelize = require("./config/database")
+
+// model
+
+const Image = require("./models/Image")
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -38,4 +45,13 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+(async()=>{
+ try {
+   await sequelize.sync({force:true})
+   console.log("Database Synced!")
+ } catch (error) {
+  console.log("Error syncing: ", error.message)
+ }
+})()
 module.exports = app;
